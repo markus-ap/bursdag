@@ -1,22 +1,28 @@
-//const no = new Date("December 25, 2023 08:00");
-const no = new Date("December 31, 2023, 08:00");
-let år = 0;
-if(no.getMonth() == 11){
-    år = no.getFullYear() + 1;
-}
-else{
-    år = no.getFullYear()
-}
-
-const måldato = new Date(`December 25, ${år} 08:50`);
-
-
-let gjenverandeTid = måldato - no;
-
-nedtelling();
 setInterval(nedtelling, 1000);
 
+window.onload = function(){
+    nedtelling();
+}
+
+function settTid(){
+    no = new Date();
+    år = 0;
+    
+    if(no.getMonth() == 11 && no.getDate() > 25){
+        år = no.getFullYear() + 1;
+    }
+    else{
+        år = no.getFullYear()
+    }
+    
+    måldato = new Date(`December 25, ${år} 08:50`);
+    gjenverandeTid = måldato - no;
+}
+
+
 function nedtelling(){    
+    settTid();
+
     let måned = no.getMonth();
     let månedDagar = new Date(år, måned, 0).getDate();
 
@@ -24,32 +30,41 @@ function nedtelling(){
 
     let månedarAtt = 11 - måned
     if(måned == 11){
-        månedarAtt += 12;
+        if(dag <= 25) månedarAtt = 0;
+        else månedarAtt += 12;
     }
 
     let dagar = 0;
-    if(dag == måldato.getDate()){
-        dagar = 0;
+    if(måned == 11 && dag == 25) {
+        månedarAtt = 0;
     }
     else if(dag < måldato.getDate()){
         dagar = måldato.getDate() - dag;
     }
     else{
-        månedarAtt -= 1;
         dagar = (månedDagar - dag) + (måldato.getDate());
+        månedarAtt -= 1;
     }
 
     const timar = Math.floor((gjenverandeTid % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutt = Math.floor((gjenverandeTid % (1000 * 60 * 60)) / (1000 * 60));
     const sekund = Math.floor((gjenverandeTid % (1000 * 60)) / 1000);
 
-    skrivDato(datostreng(månedarAtt, dagar, timar, minutt, sekund));
-}
-
-function skrivDato(dato){
-    document.getElementById("dagar").innerHTML = dato;
+    datostreng(månedarAtt, dagar, timar, minutt, sekund);
 }
 
 function datostreng(mån, dag, tim, min, sek){
-    return "Det er " + mån + " månedar, " + dag + " dagar, " + tim + " timar, " + min + " minutt, "+ sek + " sekund att."
+    var res = "";
+    if(mån != 0) res += mån + " månedar, "
+    if(dag != 0) res += dag + " dagar, " 
+
+
+    res += tim + " timar, " + min + " minutt, og "+ sek + " sekund"
+
+    var årElement = document.getElementById("år");
+    var årVerdi = (år-1) - 1991;
+    var årStreng = (mån == 0 && dag == 0) ? `🥳 ${årVerdi+1} 🥳`   : årVerdi ;
+    årElement.innerHTML = årStreng;
+
+    document.getElementById("dagar").innerHTML = res;
 }
