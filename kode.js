@@ -55,11 +55,11 @@ function nedtelling(){
 
 function datostreng(mån, dag, tim, min, sek){
     var res = "";
-    if(mån != 0) res += (mån == 1) ? mån + " måned, " : mån + " månedar, "
-    if(dag != 0) res += (dag == 1) ? dag + " dag, " : dag + " dagar, " 
-    res += (tim == 1) ? tim + " time, " : tim + " timar, "
+    if(mån != 0) res += (mån == 1) ? mån + " måned,<br>" : mån + " månedar,<br>"
+    if(dag != 0) res += (dag == 1) ? dag + " dag,<br>" : dag + " dagar,<br>" 
+    res += (tim == 1) ? tim + " time,<br>" : tim + " timar,<br>"
 
-    res += min + " minutt, og "+ sek + " sekund"
+    res += min + " minutt,<br>og "+ sek + " sekund"
 
     var årElement = document.getElementById("år");
     var årVerdi = (år-1) - 1991;
